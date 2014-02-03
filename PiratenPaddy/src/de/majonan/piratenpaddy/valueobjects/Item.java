@@ -2,6 +2,7 @@ package de.majonan.piratenpaddy.valueobjects;
 
 import java.awt.Image;
 
+
 public abstract class Item extends Entity {
 
 	private Image imageCollected;
