@@ -31,7 +31,7 @@ public class TreasureMap extends Item {
 	@Override
 	public void lookAt() {
 		// TODO Auto-generated method stub
-
+	System.out.print("Papa hat 'Mein Schatz' draufgeschrieben. Sie ist zu schmutzig, um mehr zu erkennen");
 	}
 
 }
