@@ -17,6 +17,7 @@ public abstract class Entity {
 	protected int width;
 	protected int height;
 	protected Texture texture;
+	protected boolean highlighted;
 	
 	public abstract void lookAt();
 	
@@ -31,7 +32,15 @@ public abstract class Entity {
 			e.printStackTrace();
 		}
 	}
-	public void draw(boolean highlighted){
+	public boolean isHighlighted() {
+		return highlighted;
+	}
+
+	public void setHighlighted(boolean highlighted) {
+		this.highlighted = highlighted;
+	}
+
+	public void draw(){
 		texture.bind();
 		if(highlighted){
 			glColor3d(1.0, 0.5, 0);
@@ -53,6 +62,10 @@ public abstract class Entity {
 		glTexCoord2f(0, 1);
 		glVertex2i(0, height);
 		glEnd();
+	}
+	
+	public boolean isAtPosition(int px, int py){
+		return (px > x && px < x+width && py > y && py < y+height);
 	}
 	
 	public void destroy(){

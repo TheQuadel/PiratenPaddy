@@ -16,6 +16,8 @@ import org.newdawn.slick.opengl.ImageIOImageData;
 
 
 
+
+import de.majonan.piratenpaddy.valueobjects.Entity;
 import de.majonan.piratenpaddy.valueobjects.Item;
 import de.majonan.piratenpaddy.valueobjects.items.TreasureMap;
 import static org.lwjgl.opengl.GL11.*;
@@ -29,7 +31,7 @@ public class GameManager {
 	public static final int GAME_WIDTH = 1280;
 	public static final String IMAGE_PATH ="res/img/";
 	
-	private Item test;
+	private EntityManager entityManager;
 	
 	//Konstruktor
 	public GameManager(){
@@ -66,8 +68,11 @@ public class GameManager {
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_TEXTURE_2D);
 		
+		
+		entityManager = new EntityManager();
+		
 		//erstes TestObjekt erstellen (in diesem Fall eine "Schatzkarte");
-		test = new TreasureMap(200,200,IMAGE_PATH+"icon64.png");
+		entityManager.addEntity(new TreasureMap(200,200,IMAGE_PATH+"icon64.png"));
 		
 
 	}
@@ -84,20 +89,26 @@ public class GameManager {
 	
 	private void draw() {
 		glClear(GL_COLOR_BUFFER_BIT);
-		test.draw(true);
+		entityManager.draw();
 	}
 
 
 	private void step() {
 		//Inputs behandeln
 		int mouseX = Mouse.getX();
-		int mouseY = Mouse.getY();
+		int mouseY = GAME_HEIGHT-Mouse.getY();
+		
+		entityManager.deHighlightAll();
+		Entity e = entityManager.getEntityAtPosition(mouseX, mouseY);
+		if(e != null){
+			e.setHighlighted(true);
+		}
 		
 	}
 
 
 	private void quit(){
-		test.destroy();
+		entityManager.destroy();
 		Display.destroy();
 		System.exit(0);
 	}
