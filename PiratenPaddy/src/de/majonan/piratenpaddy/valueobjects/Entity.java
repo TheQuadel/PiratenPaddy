@@ -22,6 +22,8 @@ public abstract class Entity {
 	public abstract void lookAt();
 	
 	public Entity(int x, int y, String imagePath){
+		this.x = x;
+		this.y = y;
 		try {
 			texture =   TextureLoader.getTexture("PNG", new FileInputStream(new File(imagePath)));
 			width = texture.getImageWidth();
@@ -43,7 +45,8 @@ public abstract class Entity {
 
 	public void draw(){
 		
-		
+		glLoadIdentity();
+		glTranslatef(x, y, 0f);
 		if(highlighted){
 			glColor3d(1.0, 0.5, 0);
 			glBegin(GL_QUADS);
@@ -64,6 +67,7 @@ public abstract class Entity {
 		glTexCoord2f(0, 1);
 		glVertex2i(0, height);
 		glEnd();
+		glLoadIdentity();
 	}
 	
 	public boolean isAtPosition(int px, int py){
