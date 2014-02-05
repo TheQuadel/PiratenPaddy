@@ -4,6 +4,11 @@ import de.majonan.piratenpaddy.valueobjects.Item;
 
 public class TreasureMap extends Item {
 
+	public TreasureMap(int x, int y, String imagePath) {
+		super(x, y, imagePath);
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public void pull() {
 		// TODO Auto-generated method stub
