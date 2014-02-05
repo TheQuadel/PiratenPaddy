@@ -26,6 +26,7 @@ public abstract class Entity {
 			texture =   TextureLoader.getTexture("PNG", new FileInputStream(new File(imagePath)));
 			width = texture.getImageWidth();
 			height = texture.getImageHeight();
+			texture.bind();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -41,7 +42,8 @@ public abstract class Entity {
 	}
 
 	public void draw(){
-		texture.bind();
+		
+		
 		if(highlighted){
 			glColor3d(1.0, 0.5, 0);
 			glBegin(GL_QUADS);
