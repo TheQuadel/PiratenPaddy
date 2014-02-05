@@ -31,8 +31,18 @@ public abstract class Entity {
 			e.printStackTrace();
 		}
 	}
-	public void draw(){
+	public void draw(boolean highlighted){
 		texture.bind();
+		if(highlighted){
+			glColor3d(1.0, 0.5, 0);
+			glBegin(GL_QUADS);
+			glVertex2i(-2, -2);
+			glVertex2i(width+2, -2);
+			glVertex2i(width+2, height+2);
+			glVertex2i(-2, height+2);
+			glEnd();
+		}
+		glColor3d(1.0, 1.0, 1.0);
 		glBegin(GL_QUADS);
 		glTexCoord2f(0, 0);
 		glVertex2i(0, 0);

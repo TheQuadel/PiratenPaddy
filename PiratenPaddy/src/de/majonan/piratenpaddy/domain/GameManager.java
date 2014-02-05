@@ -6,10 +6,12 @@ import java.nio.ByteBuffer;
 
 import javax.imageio.ImageIO;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.LWJGLException;
 import org.newdawn.slick.opengl.ImageIOImageData;
+
 
 
 
@@ -82,12 +84,14 @@ public class GameManager {
 	
 	private void draw() {
 		glClear(GL_COLOR_BUFFER_BIT);
-		test.draw();
+		test.draw(true);
 	}
 
 
 	private void step() {
-		// TODO Auto-generated method stub
+		//Inputs behandeln
+		int mouseX = Mouse.getX();
+		int mouseY = Mouse.getY();
 		
 	}
 
