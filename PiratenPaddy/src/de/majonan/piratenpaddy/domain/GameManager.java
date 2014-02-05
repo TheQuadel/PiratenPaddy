@@ -21,7 +21,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class GameManager {
 	
-	
+	//Konstanten
 	public static final String GAME_NAME = "PiratenPaddy";
 	public static final int GAME_HEIGHT = 720;
 	public static final int GAME_WIDTH = 1280;
@@ -29,18 +29,21 @@ public class GameManager {
 	
 	private Item test;
 	
-	
+	//Konstruktor
 	public GameManager(){
 		this.init();
 		this.run();
 		this.quit();
 	}
 	
-	
+	/**
+	 * Initialisieren des GameManagers. Erstellen des Fensters, setzen des Titels, OpenGL initialisieren
+	 */
 	private void init(){
 		try{
 			Display.setDisplayMode(new DisplayMode(GAME_WIDTH, GAME_HEIGHT));
 			Display.setTitle(GAME_NAME);
+			//FIXME: Icon für das Fenster setzen, scheint momentan noch nicht zu funktionieren
 			Display.setIcon(new ByteBuffer[] {
 			        new ImageIOImageData().imageToByteBuffer(ImageIO.read(new File(IMAGE_PATH+"icon16.png")), false, false, null),
 			        new ImageIOImageData().imageToByteBuffer(ImageIO.read(new File(IMAGE_PATH+"icon32.png")), false, false, null)
@@ -54,12 +57,14 @@ public class GameManager {
 			System.err.println("Could not find icons");
 		}
 		
+		//OpenGL-Zeug
 		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity(); // Resets any previous projection matrices
+		glLoadIdentity(); 
 		glOrtho(0, GAME_WIDTH, GAME_HEIGHT, 0, 1, -1);
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_TEXTURE_2D);
 		
+		//erstes TestObjekt erstellen (in diesem Fall eine "Schatzkarte");
 		test = new TreasureMap(200,200,IMAGE_PATH+"icon64.png");
 		
 
@@ -73,6 +78,7 @@ public class GameManager {
 			Display.sync(60);
 		}
 	}
+
 	
 	private void draw() {
 		glClear(GL_COLOR_BUFFER_BIT);
