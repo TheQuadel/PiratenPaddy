@@ -66,13 +66,17 @@ public class GameManager {
 		glLoadIdentity(); 
 		glOrtho(0, GAME_WIDTH, GAME_HEIGHT, 0, 1, -1);
 		glMatrixMode(GL_MODELVIEW);
-		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
 		
 		entityManager = new EntityManager();
 		
 		//erstes TestObjekt erstellen (in diesem Fall eine "Schatzkarte");
 		entityManager.addEntity(new TreasureMap(200,200,IMAGE_PATH+"icon64.png"));
+		entityManager.addEntity(new TreasureMap(400,200,IMAGE_PATH+"icon64.png"));
+		entityManager.addEntity(new TreasureMap(800,400,IMAGE_PATH+"karte.png"));
+		entityManager.addEntity(new TreasureMap(200,400,IMAGE_PATH+"icon64.png"));
 		
 
 	}
@@ -89,6 +93,7 @@ public class GameManager {
 	
 	private void draw() {
 		glClear(GL_COLOR_BUFFER_BIT);
+		
 		entityManager.draw();
 	}
 
