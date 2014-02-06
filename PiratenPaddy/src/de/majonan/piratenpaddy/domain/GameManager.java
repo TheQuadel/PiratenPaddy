@@ -48,18 +48,19 @@ public class GameManager {
 			Display.setDisplayMode(new DisplayMode(GAME_WIDTH, GAME_HEIGHT));
 			Display.setTitle(GAME_NAME);
 			//FIXME: Icon für das Fenster setzen, scheint momentan noch nicht zu funktionieren
-			Display.setIcon(new ByteBuffer[] {
-			        new ImageIOImageData().imageToByteBuffer(ImageIO.read(new File(IMAGE_PATH+"icon16.png")), false, false, null),
-			        new ImageIOImageData().imageToByteBuffer(ImageIO.read(new File(IMAGE_PATH+"icon32.png")), false, false, null)
-			});
+//			Display.setIcon(new ByteBuffer[] {
+//			        new ImageIOImageData().imageToByteBuffer(ImageIO.read(new File(IMAGE_PATH+"icon16.png")), false, false, null),
+//			        new ImageIOImageData().imageToByteBuffer(ImageIO.read(new File(IMAGE_PATH+"icon32.png")), false, false, null)
+//			});
 			Display.create();
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 			Display.destroy();
 			System.exit(1);
-		}catch (IOException e) {
-			System.err.println("Could not find icons");
 		}
+//		}catch (IOException e) {
+//			System.err.println("Could not find icons");
+//		}
 		
 		//OpenGL-Zeug
 		glMatrixMode(GL_PROJECTION);

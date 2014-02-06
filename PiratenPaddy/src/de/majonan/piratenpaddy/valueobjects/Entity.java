@@ -9,6 +9,7 @@ import java.io.IOException;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -26,7 +27,8 @@ public abstract class Entity {
 		this.x = x;
 		this.y = y;
 		try {
-			texture =   TextureLoader.getTexture("PNG", new FileInputStream(new File(imagePath)));
+			//texture =   TextureLoader.getTexture("PNG", new FileInputStream(new File(imagePath)));
+			texture =   TextureLoader.getTexture("PNG",ResourceLoader.getResourceAsStream(imagePath));
 			width = texture.getImageWidth();
 			height = texture.getImageHeight();
 			System.out.println("w:"+width+"h:"+height);
