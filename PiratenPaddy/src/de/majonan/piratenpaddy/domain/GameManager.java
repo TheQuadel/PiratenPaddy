@@ -73,6 +73,15 @@ public class GameManager {
 		
 		entityManager = new EntityManager();
 		
+		entityManager.addHoverListener(new EntityHoverListener() {
+			
+			@Override
+			public void onHover(Entity entity) {
+				entity.setHighlighted(true);
+				
+			}
+		});
+		
 		//erstes TestObjekt erstellen (in diesem Fall eine "Schatzkarte");
 		entityManager.addEntity(new TreasureMap(200,200,IMAGE_PATH+"icon64.png"));
 		entityManager.addEntity(new TreasureMap(400,200,IMAGE_PATH+"icon64.png"));
@@ -103,12 +112,8 @@ public class GameManager {
 		//Inputs behandeln
 		int mouseX = Mouse.getX();
 		int mouseY = GAME_HEIGHT-Mouse.getY();
-		
 		entityManager.deHighlightAll();
-		Entity e = entityManager.getEntityAtPosition(mouseX, mouseY);
-		if(e != null){
-			e.setHighlighted(true);
-		}
+		entityManager.update(mouseX, mouseY);
 		
 	}
 

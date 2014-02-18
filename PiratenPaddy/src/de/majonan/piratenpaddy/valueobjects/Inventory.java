@@ -3,11 +3,51 @@ package de.majonan.piratenpaddy.valueobjects;
 import java.util.List;
 import java.util.Vector;
 
-public class Inventory {
+public class Inventory{
 
 	private List<Item> slots;
+	private int maxItems;
+	private List<InventoryEntity> displayEntities;
+	
+	
+	private void notifyListeners(){
+		for(InventoryEntity ie : displayEntities){
+			ie.update(slots);
+		}
+	}
 	
 	public Inventory(int slotsAmount){
-		this.slots = new Vector<Item>(slotsAmount);
+		maxItems = slotsAmount;
+		this.slots = new Vector<Item>(slotsAmount < 0 ? 10 : slotsAmount);
+		this.displayEntities = new Vector<InventoryEntity>();
 	}
+	
+	public boolean addItem(Item item){
+		if(slots.size() < maxItems){
+			slots.add(item);
+			notifyListeners();
+			return true;
+		}
+		return false;
+	}
+	
+	public Item getItemByIndex(int index){
+		return slots.get(index);
+	}
+	
+	public void removeItemAtIndex(int index){
+		slots.remove(index);
+		notifyListeners();
+	}
+	
+	public void clear(){
+		slots = new Vector<Item>(maxItems < 0 ? 10 : maxItems);
+		notifyListeners();
+	}
+	
+	public void addInventoryListener(InventoryEntity listener){
+		this.displayEntities.add(listener);
+	}
+
+
 }
