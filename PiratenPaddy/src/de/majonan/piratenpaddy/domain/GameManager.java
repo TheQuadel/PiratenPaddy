@@ -1,26 +1,31 @@
 package de.majonan.piratenpaddy.domain;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.ByteBuffer;
+import static org.lwjgl.opengl.GL11.GL_BLEND;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_PROJECTION;
+import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.glBlendFunc;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glLoadIdentity;
+import static org.lwjgl.opengl.GL11.glMatrixMode;
+import static org.lwjgl.opengl.GL11.glOrtho;
 
-import javax.imageio.ImageIO;
+import java.util.List;
+import java.util.Vector;
 
+import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.LWJGLException;
-import org.newdawn.slick.opengl.ImageIOImageData;
-
-
-
-
-
 
 import de.majonan.piratenpaddy.valueobjects.Entity;
+import de.majonan.piratenpaddy.valueobjects.InventoryEntity;
 import de.majonan.piratenpaddy.valueobjects.Item;
+import de.majonan.piratenpaddy.valueobjects.Player;
 import de.majonan.piratenpaddy.valueobjects.items.TreasureMap;
-import static org.lwjgl.opengl.GL11.*;
 
 
 public class GameManager {
@@ -32,6 +37,8 @@ public class GameManager {
 	public static final String IMAGE_PATH ="res/img/";
 	
 	private EntityManager entityManager;
+	private InventoryEntity inventoryEntity;
+	private Player player;
 	
 	//Konstruktor
 	public GameManager(){
@@ -82,11 +89,39 @@ public class GameManager {
 			}
 		});
 		
+		entityManager.addClickListener(new EntityClickListener() {
+			
+			@Override
+			public void onClicked(Entity entity) {
+				if(entity instanceof Item){
+					player.getInventory().addItem((Item) entity);
+				}
+				
+			}
+		});
+		
+		int[][] position = {{265, 17},
+		                    {325, 17},
+		                    {385, 17},
+		                    {445, 17},
+		                    {265, 77},
+		                    {325, 77},
+		                    {385, 77},
+		                    {445, 77}};
+		
+		inventoryEntity = new InventoryEntity(0, 0, IMAGE_PATH+"inventar.png", position);
+		
+		player = new Player(600, 200, IMAGE_PATH+"icon64.png");
+		player.getInventory().addInventoryListener(inventoryEntity);
+		
+		
 		//erstes TestObjekt erstellen (in diesem Fall eine "Schatzkarte");
-		entityManager.addEntity(new TreasureMap(200,200,IMAGE_PATH+"icon64.png"));
-		entityManager.addEntity(new TreasureMap(400,200,IMAGE_PATH+"icon64.png"));
+		entityManager.addEntity(inventoryEntity);
+		entityManager.addEntity(new TreasureMap(200,200,IMAGE_PATH+"karte.png"));
+		entityManager.addEntity(new TreasureMap(400,200,IMAGE_PATH+"karte.png"));
 		entityManager.addEntity(new TreasureMap(800,400,IMAGE_PATH+"karte.png"));
-		entityManager.addEntity(new TreasureMap(200,400,IMAGE_PATH+"icon64.png"));
+		entityManager.addEntity(player);
+		
 		
 
 	}

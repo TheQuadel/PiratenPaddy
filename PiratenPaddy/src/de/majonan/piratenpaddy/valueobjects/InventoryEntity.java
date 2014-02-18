@@ -2,13 +2,13 @@ package de.majonan.piratenpaddy.valueobjects;
 
 import java.util.List;
 
-import org.lwjgl.util.vector.Vector2f;
+
 
 public class InventoryEntity extends Entity {
 
-	private List<Vector2f> slotPositions;
+	private int[][] slotPositions;
 	
-	public InventoryEntity(int x, int y, String imagePath, List<Vector2f> slotPositions) {
+	public InventoryEntity(int x, int y, String imagePath, int[][] slotPositions) {
 		super(x, y, imagePath);
 		this.slotPositions = slotPositions;
 	}
@@ -20,8 +20,8 @@ public class InventoryEntity extends Entity {
 	}
 
 	public void update(List<Item> slots) {
-		for(int i=0; i< slotPositions.size(); i++){
-			slots.get(i).setPosition((int)slotPositions.get(i).x, (int)slotPositions.get(i).y);
+		for(int i=0; i< slotPositions.length && i < slots.size(); i++){
+			slots.get(i).setPosition(slotPositions[i][0], slotPositions[i][1]);
 		}
 		
 	}

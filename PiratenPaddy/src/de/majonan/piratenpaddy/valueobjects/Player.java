@@ -26,5 +26,9 @@ public class Player extends Character {
 		// TODO Auto-generated method stub
 
 	}
+	
+	public Inventory getInventory(){
+		return this.inventory;
+	}
 
 }
