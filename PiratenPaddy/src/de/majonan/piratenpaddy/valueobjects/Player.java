@@ -31,4 +31,12 @@ public class Player extends Character {
 		return this.inventory;
 	}
 
+	@Override
+	public void setHighlighted(boolean highlighted) {
+		super.setHighlighted(false);
+	}
+	
+	
+	
+
 }

@@ -45,6 +45,15 @@ public class Inventory{
 		notifyListeners();
 	}
 	
+	public boolean containsItem(Item item){
+		for(Item i : slots){
+			if(i.equals(item)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void addInventoryListener(InventoryEntity listener){
 		this.displayEntities.add(listener);
 	}

@@ -93,33 +93,44 @@ public class GameManager {
 			
 			@Override
 			public void onClicked(Entity entity) {
-				if(entity instanceof Item){
+				if(entity instanceof Item && !player.getInventory().containsItem((Item) entity)){
 					player.getInventory().addItem((Item) entity);
+					Item i = ((Item) entity);
+					i.setCollected(true);
 				}
 				
 			}
 		});
 		
-		int[][] position = {{265, 17},
-		                    {325, 17},
-		                    {385, 17},
-		                    {445, 17},
-		                    {265, 77},
-		                    {325, 77},
-		                    {385, 77},
-		                    {445, 77}};
+		int[][] position = {{713, 17},
+		                    {783, 17},
+		                    {853, 17},
+		                    {923, 17},
+		                    {713, 81},
+		                    {783, 81},
+		                    {853, 81},
+		                    {823, 81}};
 		
-		inventoryEntity = new InventoryEntity(0, 0, IMAGE_PATH+"inventar.png", position);
+		inventoryEntity = new InventoryEntity(0, 720-150, IMAGE_PATH+"inventar2.png", position);
 		
-		player = new Player(600, 200, IMAGE_PATH+"icon64.png");
+		player = new Player(200, 300, IMAGE_PATH+"paddy.png");
 		player.getInventory().addInventoryListener(inventoryEntity);
+		player.setFootPosition(46, 241);
 		
 		
 		//erstes TestObjekt erstellen (in diesem Fall eine "Schatzkarte");
+		entityManager.addEntity(new Entity(0, 0, IMAGE_PATH+"bg1.png") {
+			
+			@Override
+			public void lookAt() {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		entityManager.addEntity(inventoryEntity);
-		entityManager.addEntity(new TreasureMap(200,200,IMAGE_PATH+"karte.png"));
-		entityManager.addEntity(new TreasureMap(400,200,IMAGE_PATH+"karte.png"));
-		entityManager.addEntity(new TreasureMap(800,400,IMAGE_PATH+"karte.png"));
+		entityManager.addEntity(new TreasureMap(538,464,IMAGE_PATH+"map.png",IMAGE_PATH+"karte64.png"));
+		//entityManager.addEntity(new TreasureMap(400,200,IMAGE_PATH+"karte.png",IMAGE_PATH+"karte64.png"));
+		//entityManager.addEntity(new TreasureMap(800,400,IMAGE_PATH+"karte.png",IMAGE_PATH+"karte64.png"));
 		entityManager.addEntity(player);
 		
 		
@@ -149,6 +160,11 @@ public class GameManager {
 		int mouseY = GAME_HEIGHT-Mouse.getY();
 		entityManager.deHighlightAll();
 		entityManager.update(mouseX, mouseY);
+		if(Mouse.isButtonDown(0)){
+			System.out.println("MouseButtonDown!");
+			player.moveTo(mouseX, mouseY);
+		}
+		player.tick();
 		
 	}
 

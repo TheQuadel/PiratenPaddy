@@ -1,5 +1,7 @@
 package de.majonan.piratenpaddy.domain;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
@@ -36,9 +38,10 @@ public class EntityManager {
 	}
 	
 	public Entity getEntityAtPosition(int x, int y){
-		for(Entity e : entities){
-			if(e.isAtPosition(x, y)){
-				return e;
+		
+		for(int i= entities.size()-1; i >= 0; i--){
+			if(entities.get(i).isAtPosition(x, y)){
+				return entities.get(i);
 			}
 		}
 		return null;
@@ -73,8 +76,11 @@ public class EntityManager {
 			if(Mouse.isButtonDown(0)){
 				clickedEntity = e;
 			}else{
-				for(EntityClickListener l : clickListeners){
-					l.onClicked(e);
+				if(clickedEntity != null && e != null && clickedEntity.equals(e)){
+					clickedEntity = null;
+					for(EntityClickListener l : clickListeners){
+						l.onClicked(e);
+					}
 				}
 			}
 		}
