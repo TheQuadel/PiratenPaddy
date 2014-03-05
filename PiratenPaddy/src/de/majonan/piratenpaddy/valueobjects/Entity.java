@@ -1,43 +1,50 @@
 package de.majonan.piratenpaddy.valueobjects;
 
-import java.awt.Image;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import static org.lwjgl.opengl.GL11.GL_COLOR_MATERIAL;
+import static org.lwjgl.opengl.GL11.GL_QUADS;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glColor3d;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glLoadIdentity;
+import static org.lwjgl.opengl.GL11.glTexCoord2f;
+import static org.lwjgl.opengl.GL11.glTranslatef;
+import static org.lwjgl.opengl.GL11.glVertex2i;
 
-import org.newdawn.slick.Color;
-import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
-
-import static org.lwjgl.opengl.GL11.*;
+import java.util.HashMap;
 
 public abstract class Entity {
 	protected int x;
 	protected int y;
 	protected int width;
 	protected int height;
-	protected Texture texture;
+	protected HashMap<String, Sprite> sprites;
+	protected Sprite currentSprite;
 	protected boolean highlighted;
 	
 	public abstract void lookAt();
 	
-	public Entity(int x, int y, String imagePath){
+	public Entity(int x, int y, int width, int height){
 		this.x = x;
 		this.y = y;
-		try {
-			//texture =   TextureLoader.getTexture("PNG", new FileInputStream(new File(imagePath)));
-			texture =   TextureLoader.getTexture("PNG",ResourceLoader.getResourceAsStream(imagePath));
-			width = texture.getImageWidth();
-			height = texture.getImageHeight();
-			System.out.println("w:"+width+"h:"+height);
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		this.width = width;
+		this.height = height;
+		this.sprites = new HashMap<String, Sprite>();
+//		try {
+//			//texture =   TextureLoader.getTexture("PNG", new FileInputStream(new File(imagePath)));
+//			//texture =   TextureLoader.getTexture("PNG",ResourceLoader.getResourceAsStream(imagePath));
+//			width = texture.getImageWidth();
+//			height = texture.getImageHeight();
+//			System.out.println("w:"+width+"h:"+height);
+//			
+//			
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 	public boolean isHighlighted() {
 		return highlighted;
@@ -48,38 +55,42 @@ public abstract class Entity {
 	}
 
 	public void draw(){
-		glLoadIdentity();
-		glTranslatef(x, y, 0f);
-		if(highlighted){
-			glDisable(GL_TEXTURE_2D);
-			glEnable(GL_COLOR_MATERIAL);
-			glColor3d(1.0, 0.5, 0);
-			glBegin(GL_QUADS);
-			glVertex2i(-2, -2);
-			glVertex2i(width+2, -2);
-			glVertex2i(width+2, height+2);
-			glVertex2i(-2, height+2);
-			glEnd();
-		}
+//		glLoadIdentity();
+//		glTranslatef(x, y, 0f);
+//		if(highlighted){
+//			glDisable(GL_TEXTURE_2D);
+//			glEnable(GL_COLOR_MATERIAL);
+//			glColor3d(1.0, 0.5, 0);
+//			glBegin(GL_QUADS);
+//			glVertex2i(-2, -2);
+//			glVertex2i(width+2, -2);
+//			glVertex2i(width+2, height+2);
+//			glVertex2i(-2, height+2);
+//			glEnd();
+//		}
 		
-		glEnable(GL_TEXTURE_2D);
-		glDisable(GL_COLOR_MATERIAL);
-		texture.bind();
-		glColor3d(1.0, 1.0, 1.0);
-		
-		glBegin(GL_QUADS);
-		glTexCoord2f(0, 0);
-		glVertex2i(0, 0);
-		glTexCoord2f(1, 0);
-		glVertex2i(width, 0);
-		glTexCoord2f(1, 1);
-		glVertex2i(width, height);
-		glTexCoord2f(0, 1);
-		glVertex2i(0, height);
-		glEnd();
-		glLoadIdentity();
+//		glEnable(GL_TEXTURE_2D);
+//		glDisable(GL_COLOR_MATERIAL);
+//		
+//		glColor3d(1.0, 1.0, 1.0);
+//		
+//		glBegin(GL_QUADS);
+//		glTexCoord2f(0, 0);
+//		glVertex2i(0, 0);
+//		glTexCoord2f(1, 0);
+//		glVertex2i(width, 0);
+//		glTexCoord2f(1, 1);
+//		glVertex2i(width, height);
+//		glTexCoord2f(0, 1);
+//		glVertex2i(0, height);
+//		glEnd();
+//		glLoadIdentity();
 
-		
+		if(currentSprite != null){
+			currentSprite.draw(x, y);
+		}else{
+			System.err.println("EntityError: Please change currentSprite!");
+		}
 		
 	}
 	
@@ -88,7 +99,17 @@ public abstract class Entity {
 	}
 	
 	public void destroy(){
-		texture.release();
+		for(String name : sprites.keySet()){
+			sprites.get(name).destroy();
+		}
+	}
+	
+	public void addSprite(String name, Sprite sprite){
+		this.sprites.put(name, sprite);
+	}
+	
+	public void changeSprite(String name){
+		currentSprite = sprites.get(name);
 	}
 	
 	public void setPosition(int x, int y){

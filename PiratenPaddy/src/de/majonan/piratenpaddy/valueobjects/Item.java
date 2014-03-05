@@ -14,27 +14,26 @@ public abstract class Item extends Entity {
 	private Texture defaultTexture;
 	private Texture collectedTexture;
 
-	public Item(int x, int y, String imagePath, String imagePathCollected) {
-		super(x, y, imagePath);
-		try {
-			defaultTexture =   TextureLoader.getTexture("PNG",ResourceLoader.getResourceAsStream(imagePath));
-			collectedTexture =   TextureLoader.getTexture("PNG",ResourceLoader.getResourceAsStream(imagePathCollected));
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public Item(int x, int y, int width, int height) {
+		super(x, y, width, height);
+//		try {
+//			defaultTexture =   TextureLoader.getTexture("PNG",ResourceLoader.getResourceAsStream(imagePath));
+//			collectedTexture =   TextureLoader.getTexture("PNG",ResourceLoader.getResourceAsStream(imagePathCollected));
+//			
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	public void setCollected(boolean col){
 		if(col){
-			texture = collectedTexture;
+			this.changeSprite("collected");
 		}else{
-			texture = defaultTexture;
+			this.changeSprite("default");
 		}
-		width = texture.getImageWidth();
-		height = texture.getImageHeight();
+		
 	}
 	
 	public abstract void pull();

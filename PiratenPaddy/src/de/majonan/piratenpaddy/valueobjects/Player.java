@@ -4,8 +4,8 @@ public class Player extends Character {
 
 	private Inventory inventory;
 	
-	public Player(int x, int y, String imagePath) {
-		super(x, y, imagePath);
+	public Player(int x, int y, int width, int height) {
+		super(x, y, width, height);
 		this.inventory = new Inventory(16);
 	}
 

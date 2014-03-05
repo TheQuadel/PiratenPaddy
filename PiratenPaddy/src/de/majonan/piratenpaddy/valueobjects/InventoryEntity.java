@@ -8,8 +8,8 @@ public class InventoryEntity extends Entity {
 
 	private int[][] slotPositions;
 	
-	public InventoryEntity(int x, int y, String imagePath, int[][] slotPositions) {
-		super(x, y, imagePath);
+	public InventoryEntity(int x, int y, int width, int height, int[][] slotPositions) {
+		super(x, y, width, height);
 		this.slotPositions = slotPositions;
 	}
 
