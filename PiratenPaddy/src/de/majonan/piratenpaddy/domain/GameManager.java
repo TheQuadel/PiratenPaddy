@@ -31,6 +31,8 @@ import de.majonan.piratenpaddy.valueobjects.items.TreasureMap;
 
 public class GameManager {
 	
+	public static final boolean DEBUG = true;
+	
 	//Konstanten
 	public static final String GAME_NAME = "PiratenPaddy";
 	public static final int GAME_HEIGHT = 720;
@@ -114,15 +116,16 @@ public class GameManager {
 		                    {853, 81},
 		                    {823, 81}};
 		
-		inventoryEntity = new InventoryEntity(0, 720-150, 1280, 150, position);
+		inventoryEntity = new InventoryEntity(0, 720-15, 1280, 150, position);
 		inventoryEntity.addSprite("default", (new Sprite(1280, 150, 0, 0)).addFrame(IMAGE_PATH+"inventar2.png", 5000));
 		inventoryEntity.changeSprite("default");
 		
-		player = new Player(200, 300, 100, 256);
-		player.addSprite("default", (new Sprite(46, 241, 100, 256)).addFrame(IMAGE_PATH+"paddy.png", 200).addFrame(IMAGE_PATH+"paddyw.png", 200));
+		//player = new Player(200, 300, 100, 256);
+		//player.addSprite("default", (new Sprite(100, 256, 46, 241)).addFrame(IMAGE_PATH+"paddy.png", 200).addFrame(IMAGE_PATH+"paddyw.png", 200));
+		player = new Player(500, 600, 147, 449);
+		player.addSprite("default", (new Sprite(147, 449, 60, 433)).addFrame(IMAGE_PATH+"paddy3.png", 200).addFrame(IMAGE_PATH+"paddy3.png", 200));
 		player.changeSprite("default");
 		player.getInventory().addInventoryListener(inventoryEntity);
-		player.setFootPosition(46, 241);
 		
 		
 		//erstes TestObjekt erstellen (in diesem Fall eine "Schatzkarte");
@@ -136,16 +139,16 @@ public class GameManager {
 				
 			}
 		};
-		bg.addSprite("default", (new Sprite(0,0,720,1280)).addFrame(IMAGE_PATH+"bg1.png", 10000));
+		bg.addSprite("default", (new Sprite(720,1280,0,0)).addFrame(IMAGE_PATH+"paddyszimmer.png", 10000));
 		bg.changeSprite("default");
 		entityManager.addEntity(bg);
 		
 		entityManager.addEntity(inventoryEntity);
-		Entity map = new TreasureMap(538,464,130,30);
-		map.addSprite("default", (new Sprite(0,0,130,30).addFrame(IMAGE_PATH+"map.png", 1000)));
-		map.addSprite("collected", (new Sprite(0,0,130,30).addFrame(IMAGE_PATH+"karte64.png", 2000)));
-		map.changeSprite("default");
-		entityManager.addEntity(map);
+//		Entity map = new TreasureMap(538,464,130,30);
+//		map.addSprite("default", (new Sprite(130,30,0,0).addFrame(IMAGE_PATH+"map.png", 1000)));
+//		map.addSprite("collected", (new Sprite(130,30,0,0).addFrame(IMAGE_PATH+"karte64.png", 2000)));
+//		map.changeSprite("default");
+//		entityManager.addEntity(map);
 		//entityManager.addEntity(new TreasureMap(400,200,IMAGE_PATH+"karte.png",IMAGE_PATH+"karte64.png"));
 		//entityManager.addEntity(new TreasureMap(800,400,IMAGE_PATH+"karte.png",IMAGE_PATH+"karte64.png"));
 		entityManager.addEntity(player);

@@ -13,9 +13,7 @@ public abstract class Character extends Entity {
 	private int startWidth;
 	private int startHeight;
 	
-	private int footX;
-	private int footY;
-	private int footZ;
+	private float z;
 	
 	public Character(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -23,7 +21,7 @@ public abstract class Character extends Entity {
 		this.destinationY = y;
 		this.startX = x;
 		this.startY = y;
-		this.footZ =(int)((y/720f)*80+20);
+		this.z =((y/720f)*80+20);
 		this.startWidth = width;
 		this.startHeight = height;
 		// TODO Auto-generated constructor stub
@@ -33,10 +31,9 @@ public abstract class Character extends Entity {
 	public void moveTo(int x, int y){
 		this.destinationX = x;
 		int nfootZ = (int)((y/720f)*80+20);
-		this.destinationY = y-footY*footZ/100;
-		this.startX = x;
-		this.startY = y;
-		System.out.println("moveTo"+x+","+y+", fz"+footZ+", nfz:"+nfootZ);
+		this.destinationY = y;
+		this.startX = this.x;
+		this.startY = this.y;
 	}
 	
 	public void tick(){
@@ -48,11 +45,12 @@ public abstract class Character extends Entity {
 		if(Math.abs(destinationY-y) > 2){
 			y += Math.signum(destinationY-y)*speed;
 		}
-		footZ = (int)((y/720f)*80+20);
+		z = ((y/720f)*80+20);
+		System.out.println("z:"+z);
 
 		
-		width = (int) (startWidth*footZ/100f);
-		height = (int) (startHeight*footZ/100f);
+		width = (int) (startWidth*z/100f);
+		height = (int) (startHeight*z/100f);
 		
 	}
 	
@@ -60,8 +58,13 @@ public abstract class Character extends Entity {
 	public abstract void talkTo();
 
 	
-	public void setFootPosition(int fx, int fy){
-		this.footX = fx;
-		this.footY = fy;
+	@Override
+	public void draw(){
+		if(currentSprite != null){
+			currentSprite.draw(x, y, z/100f);//width/(float)startWidth);
+			
+		}else{
+			System.err.println("EntityError: Please change currentSprite!");
+		}
 	}
 }

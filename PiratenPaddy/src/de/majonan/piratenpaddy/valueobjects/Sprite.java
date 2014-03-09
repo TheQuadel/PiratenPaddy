@@ -1,17 +1,6 @@
 package de.majonan.piratenpaddy.valueobjects;
 
-import static org.lwjgl.opengl.GL11.GL_COLOR_MATERIAL;
-import static org.lwjgl.opengl.GL11.GL_QUADS;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glBegin;
-import static org.lwjgl.opengl.GL11.glColor3d;
-import static org.lwjgl.opengl.GL11.glDisable;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glEnd;
-import static org.lwjgl.opengl.GL11.glLoadIdentity;
-import static org.lwjgl.opengl.GL11.glTexCoord2f;
-import static org.lwjgl.opengl.GL11.glTranslatef;
-import static org.lwjgl.opengl.GL11.glVertex2i;
+import static org.lwjgl.opengl.GL11.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,6 +11,8 @@ import java.util.Vector;
 
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
+
+import de.majonan.piratenpaddy.domain.GameManager;
 
 public class Sprite {
 	
@@ -39,6 +30,9 @@ public class Sprite {
 		this.frames = new Vector<Texture>();
 		this.deltas = new Vector<Long>();
 		this.lastFrameTime = System.currentTimeMillis();
+		
+		this.anchorX = anchorX;
+		this.anchorY = anchorY;
 	}
 	
 	public Sprite addFrame(Texture texture, long delta){
@@ -67,6 +61,9 @@ public class Sprite {
 	}
 	
 	public void draw(int x, int y){
+		draw(x,y,1);
+	}
+	public void draw(int x, int y, float resizeFactor){
 		if(currentFrame == -1 || frames.size() == 0){
 			System.err.println("SpriteError: Please add frames before drawing!");
 			return;
@@ -82,12 +79,11 @@ public class Sprite {
 		frames.get(currentFrame).bind();
 		
 		glColor3d(1.0, 1.0, 1.0);
-		
-		int w = frames.get(currentFrame).getImageWidth();
-		int h = frames.get(currentFrame).getImageHeight();
+		int w = (int) (resizeFactor * frames.get(currentFrame).getTextureWidth());
+		int h = (int) (resizeFactor * frames.get(currentFrame).getTextureHeight());
 		
 		glLoadIdentity();
-		glTranslatef(x-anchorX, y-anchorY, 0f);
+		glTranslatef(x-anchorX*resizeFactor, y-anchorY*resizeFactor, 0f);
 		
 		glBegin(GL_QUADS);
 		glTexCoord2f(0, 0);
@@ -99,6 +95,62 @@ public class Sprite {
 		glTexCoord2f(0, 1);
 		glVertex2i(0, h);
 		glEnd();
+		
+		
+		if(GameManager.DEBUG){
+			glDisable(GL_TEXTURE_2D);
+			glEnable(GL_COLOR_MATERIAL);
+				
+			
+			glLineWidth(2); 
+			glColor3f(0, 0, 1);
+			w = (int) (resizeFactor * frames.get(currentFrame).getImageWidth());
+			h = (int) (resizeFactor * frames.get(currentFrame).getImageHeight());
+			glBegin(GL_LINES);
+			glVertex3f(1, 1, 0);
+			glVertex3f(w-1, 1, 0);
+			
+			glVertex3f(w-1, 1, 0);
+			glVertex3f(w-1, h-1, 0);
+			
+			glVertex3f(w-1, h-1, 0);
+			glVertex3f(1, h-1, 0);
+			
+			glVertex3f(1, h-1, 0);
+			glVertex3f(1, 1, 0);
+			
+			glColor3f(1, 0, 0);
+			w = (int) frames.get(currentFrame).getTextureWidth();
+			h = (int) frames.get(currentFrame).getTextureHeight();
+			
+			glVertex3f(0, 0, 0);
+			glVertex3f(w, 0, 0);
+			
+			glVertex3f(w, 0, 0);
+			glVertex3f(w, h, 0);
+			
+			glVertex3f(w, h, 0);
+			glVertex3f(0, h, 0);
+			
+			glVertex3f(0, h, 0);
+			glVertex3f(0, 0, 0);
+			
+			
+			glColor3f(0, 1, 0);
+			glVertex3f(anchorX-4, anchorY-4, 0);
+			glVertex3f(anchorX+4, anchorY+4, 0);
+			
+			glVertex3f(anchorX+4, anchorY-4, 0);
+			glVertex3f(anchorX-4, anchorY+4, 0);
+			glColor3f(0, 1, 1);
+			glVertex3f(resizeFactor*anchorX-4, resizeFactor*anchorY-4, 0);
+			glVertex3f(resizeFactor*anchorX+4, resizeFactor*anchorY+4, 0);
+			
+			glVertex3f(resizeFactor*anchorX+4, resizeFactor*anchorY-4, 0);
+			glVertex3f(resizeFactor*anchorX-4, resizeFactor*anchorY+4, 0);
+			glEnd();
+		}
+			
 		glLoadIdentity();
 		
 	}
