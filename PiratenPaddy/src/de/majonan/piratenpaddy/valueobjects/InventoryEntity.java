@@ -7,9 +7,12 @@ import java.util.List;
 public class InventoryEntity extends Entity {
 
 	private int[][] slotPositions;
+	private int destY;
+	private boolean hidden = false;
 	
 	public InventoryEntity(int x, int y, int width, int height, int[][] slotPositions) {
 		super(x, y, width, height);
+		 destY = y;
 		this.slotPositions = slotPositions;
 	}
 
@@ -25,10 +28,31 @@ public class InventoryEntity extends Entity {
 		}
 		
 	}
+	
 
 	@Override
 	public void setHighlighted(boolean highlighted) {
 		this.highlighted = false;
+	}
+	
+	public void tick(){
+		if(Math.abs(destY-y) > 4){
+			y += (int)((destY-y))/10;
+		}
+	}
+	
+	public void show(){
+		this.destY = 720-150;
+		hidden = false;
+	}
+	
+	public void hide(){
+		this.destY = 720-5;
+		hidden = true;
+	}
+	
+	public boolean isHidden(){
+		return hidden;
 	}
 	
 	

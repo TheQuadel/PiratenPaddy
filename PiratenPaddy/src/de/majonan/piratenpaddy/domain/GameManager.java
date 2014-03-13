@@ -13,14 +13,12 @@ import static org.lwjgl.opengl.GL11.glLoadIdentity;
 import static org.lwjgl.opengl.GL11.glMatrixMode;
 import static org.lwjgl.opengl.GL11.glOrtho;
 
-import java.util.List;
-import java.util.Vector;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
+import de.majonan.piratenpaddy.valueobjects.Area;
 import de.majonan.piratenpaddy.valueobjects.Entity;
 import de.majonan.piratenpaddy.valueobjects.InventoryEntity;
 import de.majonan.piratenpaddy.valueobjects.Item;
@@ -31,7 +29,7 @@ import de.majonan.piratenpaddy.valueobjects.items.TreasureMap;
 
 public class GameManager {
 	
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = !true;
 	
 	//Konstanten
 	public static final String GAME_NAME = "PiratenPaddy";
@@ -42,6 +40,8 @@ public class GameManager {
 	private EntityManager entityManager;
 	private InventoryEntity inventoryEntity;
 	private Player player;
+	private Area area;
+	//sprivate Cursor cursor;
 	
 	//Konstruktor
 	public GameManager(){
@@ -73,6 +73,9 @@ public class GameManager {
 //		}catch (IOException e) {
 //			System.err.println("Could not find icons");
 //		}
+		
+		
+		//Mouse.setGrabbed(true);
 		
 		//OpenGL-Zeug
 		glMatrixMode(GL_PROJECTION);
@@ -131,28 +134,32 @@ public class GameManager {
 		//erstes TestObjekt erstellen (in diesem Fall eine "Schatzkarte");
 		//entityManager.addEntity(
 		
-		Entity bg = new Entity(0, 0, 720, 1280) {
-			
-			@Override
-			public void lookAt() {
-				// TODO Auto-generated method stub
-				
-			}
-		};
-		bg.addSprite("default", (new Sprite(720,1280,0,0)).addFrame(IMAGE_PATH+"paddyszimmer.png", 10000));
-		bg.changeSprite("default");
-		entityManager.addEntity(bg);
+		area = new Area(0, 0, 720, 1280);
+		area.addSprite("default", (new Sprite(720,1280,0,0)).addFrame(IMAGE_PATH+"paddyszimmer.png", 10000));
+		area.setMask((new Sprite(720,1280,0,0)).addFrame(IMAGE_PATH+"paddyszimmer_mask.png", 10000));
+		area.changeSprite("default");
+		entityManager.addEntity(area);
 		
 		entityManager.addEntity(inventoryEntity);
-//		Entity map = new TreasureMap(538,464,130,30);
-//		map.addSprite("default", (new Sprite(130,30,0,0).addFrame(IMAGE_PATH+"map.png", 1000)));
-//		map.addSprite("collected", (new Sprite(130,30,0,0).addFrame(IMAGE_PATH+"karte64.png", 2000)));
-//		map.changeSprite("default");
-//		entityManager.addEntity(map);
+		Entity map = new TreasureMap(538,464,130,30);
+		map.addSprite("default", (new Sprite(130,30,0,0).addFrame(IMAGE_PATH+"map.png", 1000)));
+		map.addSprite("collected", (new Sprite(130,30,0,0).addFrame(IMAGE_PATH+"karte64.png", 2000)));
+		map.changeSprite("default");
+		entityManager.addEntity(map);
 		//entityManager.addEntity(new TreasureMap(400,200,IMAGE_PATH+"karte.png",IMAGE_PATH+"karte64.png"));
 		//entityManager.addEntity(new TreasureMap(800,400,IMAGE_PATH+"karte.png",IMAGE_PATH+"karte64.png"));
 		entityManager.addEntity(player);
 		
+		
+//		Sprite test = new Sprite(8,4,0,0);
+//		test.addFrame(IMAGE_PATH+"test2.png", 20000);
+//		for(int j=0; j<8; j++){
+//			System.out.println("\nPixel["+j+"]");
+//			int[] col = test.getColorOfPixel(j, 1);
+//			for(int i=0; i<col.length; i++){
+//				System.out.println("col["+i+"] == "+col[i]);
+//			}
+//		}
 		
 
 	}
@@ -181,11 +188,20 @@ public class GameManager {
 		entityManager.deHighlightAll();
 		entityManager.update(mouseX, mouseY);
 		if(Mouse.isButtonDown(0)){
-			System.out.println("MouseButtonDown!");
-			player.moveTo(mouseX, mouseY);
+			//System.out.println("MouseButtonDown!");
+			if(!player.isMoving() && area.isPositonWalkable(mouseX, mouseY)){
+				player.moveTo(mouseX, mouseY);
+			}
+		}
+		if(mouseY > 700 && inventoryEntity.isHidden()){
+			inventoryEntity.show();
+		}
+		if(!inventoryEntity.isHidden() && mouseY < 720-150-20){
+			inventoryEntity.hide();
 		}
 		player.tick();
-		
+		inventoryEntity.tick();
+		player.getInventory().notifyListeners();
 	}
 
 

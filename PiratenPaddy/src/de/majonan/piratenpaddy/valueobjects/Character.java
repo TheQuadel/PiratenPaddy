@@ -12,6 +12,7 @@ public abstract class Character extends Entity {
 	private int startY;
 	private int startWidth;
 	private int startHeight;
+	private boolean isMoving = false;
 	
 	private float z;
 	
@@ -29,6 +30,7 @@ public abstract class Character extends Entity {
 	private Vector<CharacterState> states;
 	
 	public void moveTo(int x, int y){
+		isMoving = true;
 		this.destinationX = x;
 		int nfootZ = (int)((y/720f)*80+20);
 		this.destinationY = y;
@@ -38,15 +40,18 @@ public abstract class Character extends Entity {
 	
 	public void tick(){
 	
+		isMoving = false;
 		if(Math.abs(destinationX-x) > 2){
 			x += Math.signum(destinationX-x)*speed;
+			isMoving = true;
 			//System.out.println("moved");
 		}
 		if(Math.abs(destinationY-y) > 2){
 			y += Math.signum(destinationY-y)*speed;
+			isMoving = true;
 		}
 		z = ((y/720f)*80+20);
-		System.out.println("z:"+z);
+		//System.out.println("z:"+z);
 
 		
 		width = (int) (startWidth*z/100f);
@@ -57,6 +62,10 @@ public abstract class Character extends Entity {
 	public abstract void changeState(int stateId);
 	public abstract void talkTo();
 
+	
+	public boolean isMoving(){
+		return isMoving;
+	}
 	
 	@Override
 	public void draw(){

@@ -10,7 +10,7 @@ public class Inventory{
 	private List<InventoryEntity> displayEntities;
 	
 	
-	private void notifyListeners(){
+	public void notifyListeners(){
 		for(InventoryEntity ie : displayEntities){
 			ie.update(slots);
 		}
