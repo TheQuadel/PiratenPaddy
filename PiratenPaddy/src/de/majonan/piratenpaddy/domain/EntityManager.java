@@ -2,6 +2,7 @@ package de.majonan.piratenpaddy.domain;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 
@@ -13,6 +14,7 @@ public class EntityManager {
 
 	private List<Entity> entities;
 	private Entity clickedEntity;
+	private Comparator<Entity> entityComparator;
 	
 	private List<EntityHoverListener> hoverListeners;
 	private List<EntityClickListener> clickListeners;
@@ -21,10 +23,18 @@ public class EntityManager {
 		entities = new Vector<Entity>();
 		hoverListeners = new Vector<EntityHoverListener>();
 		clickListeners = new Vector<EntityClickListener>();
+		entityComparator = new Comparator<Entity>() {
+
+			@Override
+			public int compare(Entity e1, Entity e2) {
+				return e1.compareTo(e2);
+			}
+		};
 	}
 	
 	public void addEntity(Entity en){
 		entities.add(en);
+		Collections.sort(entities,entityComparator);
 	}
 	
 	public List<Entity> getEntitiesAtPosition(int x, int y){
@@ -96,5 +106,10 @@ public class EntityManager {
 	
 	public void addClickListener(EntityClickListener listener) {
 		this.clickListeners.add(listener);
+	}
+
+	public void resort() {
+		Collections.sort(entities,entityComparator);
+		
 	}
 }

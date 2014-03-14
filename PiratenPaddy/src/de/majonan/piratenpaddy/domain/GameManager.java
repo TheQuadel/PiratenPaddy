@@ -14,6 +14,7 @@ import static org.lwjgl.opengl.GL11.glMatrixMode;
 import static org.lwjgl.opengl.GL11.glOrtho;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -25,6 +26,9 @@ import de.majonan.piratenpaddy.valueobjects.Item;
 import de.majonan.piratenpaddy.valueobjects.Player;
 import de.majonan.piratenpaddy.valueobjects.Sprite;
 import de.majonan.piratenpaddy.valueobjects.items.TreasureMap;
+import de.majonan.piratenpaddy.valueobjects.listeners.ClickListener;
+import de.majonan.piratenpaddy.valueobjects.listeners.KeyboardListener;
+import de.majonan.piratenpaddy.valueobjects.listeners.MouseMoveListener;
 
 
 public class GameManager {
@@ -37,6 +41,11 @@ public class GameManager {
 	public static final int GAME_WIDTH = 1280;
 	public static final String IMAGE_PATH ="res/img/";
 	
+	public static final int ZINDEX_BACKGROUND = -5;
+	public static final int ZINDEX_INVENTORY = 1000;
+	
+	
+	private InputManager inputManager;
 	private EntityManager entityManager;
 	private InventoryEntity inventoryEntity;
 	private Player player;
@@ -86,6 +95,7 @@ public class GameManager {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
 		
+		inputManager = new InputManager();
 		entityManager = new EntityManager();
 		
 		entityManager.addHoverListener(new EntityHoverListener() {
@@ -103,6 +113,8 @@ public class GameManager {
 			public void onClicked(Entity entity) {
 				if(entity instanceof Item && !player.getInventory().containsItem((Item) entity)){
 					player.getInventory().addItem((Item) entity);
+					entity.setZIndex(ZINDEX_INVENTORY+2);
+					entityManager.resort();
 					Item i = ((Item) entity);
 					i.setCollected(true);
 				}
@@ -122,6 +134,7 @@ public class GameManager {
 		inventoryEntity = new InventoryEntity(0, 720-15, 1280, 150, position);
 		inventoryEntity.addSprite("default", (new Sprite(1280, 150, 0, 0)).addFrame(IMAGE_PATH+"inventar2.png", 5000));
 		inventoryEntity.changeSprite("default");
+		inventoryEntity.setZIndex(ZINDEX_INVENTORY);
 		
 		//player = new Player(200, 300, 100, 256);
 		//player.addSprite("default", (new Sprite(100, 256, 46, 241)).addFrame(IMAGE_PATH+"paddy.png", 200).addFrame(IMAGE_PATH+"paddyw.png", 200));
@@ -138,6 +151,7 @@ public class GameManager {
 		area.addSprite("default", (new Sprite(720,1280,0,0)).addFrame(IMAGE_PATH+"paddyszimmer.png", 10000));
 		area.setMask((new Sprite(720,1280,0,0)).addFrame(IMAGE_PATH+"paddyszimmer_mask.png", 10000));
 		area.changeSprite("default");
+		area.setZIndex(ZINDEX_BACKGROUND);
 		entityManager.addEntity(area);
 		
 		entityManager.addEntity(inventoryEntity);
@@ -150,6 +164,8 @@ public class GameManager {
 		//entityManager.addEntity(new TreasureMap(800,400,IMAGE_PATH+"karte.png",IMAGE_PATH+"karte64.png"));
 		entityManager.addEntity(player);
 		
+
+		
 		
 //		Sprite test = new Sprite(8,4,0,0);
 //		test.addFrame(IMAGE_PATH+"test2.png", 20000);
@@ -161,6 +177,60 @@ public class GameManager {
 //			}
 //		}
 		
+		
+		
+		
+		
+		inputManager.addKeyBoardListener(new KeyboardListener() {
+			
+			@Override
+			public boolean onKeyUp(int button) {
+				System.out.println("KeyEvent: [Up|"+Keyboard.getKeyName(button)+"]");
+				return false;
+			}
+			
+			@Override
+			public boolean onKeyPressed(int button) {
+				//System.out.println("KeyEvent: [Pressed|"+Keyboard.getKeyName(button)+"]");
+				return false;
+			}
+			
+			@Override
+			public boolean onKeyDown(int button) {
+				System.out.println("KeyEvent: [Down|"+Keyboard.getKeyName(button)+"]");
+				return false;
+			}
+		});
+		
+		inputManager.addClickListener(new ClickListener() {
+			
+			@Override
+			public boolean onMouseUp(int key) {
+				System.out.println("MouseEvent: [Up|"+Mouse.getButtonName(key)+"]");
+				return false;
+			}
+			
+			@Override
+			public boolean onMouseDown(int key) {
+				System.out.println("MouseEvent: [Down|"+Mouse.getButtonName(key)+"]");
+				return false;
+			}
+			
+			@Override
+			public boolean onMouseClicked(int key) {
+				System.out.println("MouseEvent: [Clicked|"+Mouse.getButtonName(key)+"]");
+				return false;
+			}
+		});
+	
+		inputManager.addMouseMoveListener(new MouseMoveListener() {
+			
+			@Override
+			public boolean onMouseMove(int x, int y, int dx, int dy) {
+				System.out.println("MouseEvent: [Moved| x:"+x+" y: "+y+" dx:"+dx+" dy:"+dy+"]");
+				return false;
+			}
+		});
 
 	}
 	
@@ -183,6 +253,7 @@ public class GameManager {
 
 	private void step() {
 		//Inputs behandeln
+		inputManager.tick();
 		int mouseX = Mouse.getX();
 		int mouseY = GAME_HEIGHT-Mouse.getY();
 		entityManager.deHighlightAll();

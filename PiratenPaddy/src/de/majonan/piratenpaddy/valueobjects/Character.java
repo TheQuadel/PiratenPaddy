@@ -40,16 +40,29 @@ public abstract class Character extends Entity {
 	
 	public void tick(){
 	
+//		isMoving = false;
+//		if(Math.abs(destinationX-x) > 2){
+//			x += Math.signum(destinationX-x)*speed;
+//			isMoving = true;
+//			//System.out.println("moved");
+//		}
+//		if(Math.abs(destinationY-y) > 2){
+//			y += Math.signum(destinationY-y)*speed;
+//			isMoving = true;
+//		}
+		
 		isMoving = false;
-		if(Math.abs(destinationX-x) > 2){
-			x += Math.signum(destinationX-x)*speed;
+		if(Math.abs(destinationY-y) > 2 || Math.abs(destinationX-x) > 2){
+			
+			double directionX = Math.acos((destinationX-x)/Math.sqrt((destinationX-x)*(destinationX-x)+(destinationY-y)*(destinationY-y)));
+			double directionY = Math.asin((destinationY-y)/Math.sqrt((destinationX-x)*(destinationX-x)+(destinationY-y)*(destinationY-y)));
+			x += Math.cos(directionX)*speed;
+			y += Math.sin(directionY)*speed;
+			//System.out.println("Dirs: x:"+directionX+" y:"+directionY);
+			
 			isMoving = true;
-			//System.out.println("moved");
 		}
-		if(Math.abs(destinationY-y) > 2){
-			y += Math.signum(destinationY-y)*speed;
-			isMoving = true;
-		}
+		
 		z = ((y/720f)*80+20);
 		//System.out.println("z:"+z);
 

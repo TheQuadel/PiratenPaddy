@@ -15,13 +15,16 @@ import static org.lwjgl.opengl.GL11.glVertex2i;
 
 import java.util.HashMap;
 
-public abstract class Entity {
+public abstract class Entity implements Comparable<Entity> {
 	protected int x;
 	protected int y;
 	protected int width;
 	protected int height;
+	protected int zIndex;
 	protected HashMap<String, Sprite> sprites;
 	protected Sprite currentSprite;
+	
+
 	protected boolean highlighted;
 	
 	public abstract void lookAt();
@@ -115,6 +118,25 @@ public abstract class Entity {
 	public void setPosition(int x, int y){
 		this.x = x;
 		this.y = y;
+	}
+	
+	public int getZIndex(){
+		return this.zIndex;
+	}
+	
+	public void setZIndex(int zIndex){
+		this.zIndex = zIndex;
+	}
+	
+	@Override
+	public int compareTo(Entity other) {
+		if(this.zIndex < other.getZIndex() ){
+			return -1;
+		}
+		if(this.zIndex > other.getZIndex()){
+			return 1;
+		}
+		return 0;
 	}
 	
 }
