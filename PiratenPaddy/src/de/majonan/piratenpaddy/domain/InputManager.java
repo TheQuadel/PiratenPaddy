@@ -84,7 +84,7 @@ public class InputManager {
 		
 		while(Mouse.next()){
 			int x = Mouse.getEventX();
-			int y = Mouse.getEventY();
+			int y = GameManager.GAME_HEIGHT-Mouse.getEventY();
 			int dx = Mouse.getEventDX();
 			int dy = Mouse.getEventDY();
 			int button = Mouse.getEventButton();
