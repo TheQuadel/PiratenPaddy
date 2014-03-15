@@ -14,6 +14,9 @@ import de.majonan.piratenpaddy.valueobjects.listeners.MouseMoveListener;
 public class InputManager {
 
 	
+	int mouseX;
+	int mouseY;
+	
 	List<Integer> pressedKeys;
 	List<Integer> pressedMouseButtons;
 
@@ -91,6 +94,8 @@ public class InputManager {
 			boolean pressed = Mouse.getEventButtonState();
 			
 			if(dx != 0 || dy != 0){
+				mouseX = x;
+				mouseY = y;
 				for(MouseMoveListener listener : mouseMoveListener){
 					if (listener.onMouseMove(x,y,dx,dy)){
 						break;
@@ -101,7 +106,7 @@ public class InputManager {
 			if(pressed && !isMouseButtonPressed(button)){
 				pressedMouseButtons.add(button);
 				for(ClickListener listener : clickListener){
-					if (listener.onMouseDown(button)){
+					if (listener.onMouseDown(button, x, y)){
 						break;
 					};
 				}
@@ -109,7 +114,7 @@ public class InputManager {
 			if(!pressed && isMouseButtonPressed(button)){
 				pressedMouseButtons.add(button);
 				for(ClickListener listener : clickListener){
-					if (listener.onMouseUp(button)){
+					if (listener.onMouseUp(button, x, y)){
 						break;
 					};
 				}
@@ -139,5 +144,12 @@ public class InputManager {
 		clickListener.add(l);
 	}
 	
+	public int getMouseX(){
+		return mouseX;
+	}
+	
+	public int getMouseY(){
+		return mouseY;
+	}
 	
 }
