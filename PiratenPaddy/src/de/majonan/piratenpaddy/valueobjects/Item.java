@@ -11,8 +11,8 @@ import org.newdawn.slick.util.ResourceLoader;
 
 public abstract class Item extends Entity {
 	
-	private Texture defaultTexture;
-	private Texture collectedTexture;
+	private Point nearestPoint;
+	protected TextTransmitter texttransmitter;
 
 	public Item(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -40,5 +40,17 @@ public abstract class Item extends Entity {
 	public abstract void push();
 	public abstract void open();
 	public abstract void close();
+
+	public Point getNearestPoint() {
+		return nearestPoint;
+	}
+
+	public void setNearestPoint(Point nearestPoint) {
+		this.nearestPoint = nearestPoint;
+	}
+	
+	public void setTextTransmitter(TextTransmitter tt){
+		this.texttransmitter = tt;
+	}
 
 }

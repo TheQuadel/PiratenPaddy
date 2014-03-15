@@ -1,21 +1,6 @@
 package de.majonan.piratenpaddy.valueobjects;
 
-import static org.lwjgl.opengl.GL11.GL_COLOR_MATERIAL;
-import static org.lwjgl.opengl.GL11.GL_LINES;
-import static org.lwjgl.opengl.GL11.GL_QUADS;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glBegin;
-import static org.lwjgl.opengl.GL11.glColor3d;
-import static org.lwjgl.opengl.GL11.glColor3f;
-import static org.lwjgl.opengl.GL11.glDisable;
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL11.glEnd;
-import static org.lwjgl.opengl.GL11.glLineWidth;
-import static org.lwjgl.opengl.GL11.glLoadIdentity;
-import static org.lwjgl.opengl.GL11.glTexCoord2f;
-import static org.lwjgl.opengl.GL11.glTranslatef;
-import static org.lwjgl.opengl.GL11.glVertex2i;
-import static org.lwjgl.opengl.GL11.glVertex3f;
+import static org.lwjgl.opengl.GL11.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,7 +25,7 @@ public class Sprite {
 	private int currentFrame = -1;
 	private long lastFrameTime = 0;
 	
-	private int width, height, anchorX, anchorY;
+	private float width, height, anchorX, anchorY;
 	
 	public Sprite(int width, int height, int anchorX, int anchorY){
 		this.width = width;
@@ -78,10 +63,10 @@ public class Sprite {
 		return this;
 	}
 	
-	public void draw(int x, int y){
+	public void draw(float x, float y){
 		draw(x,y,1);
 	}
-	public void draw(int x, int y, float resizeFactor){
+	public void draw(float x, float y, float resizeFactor){
 		if(currentFrame == -1 || frames.size() == 0){
 			System.err.println("SpriteError: Please add frames before drawing!");
 			return;
@@ -97,21 +82,21 @@ public class Sprite {
 		frames.get(currentFrame).bind();
 		
 		glColor3d(1.0, 1.0, 1.0);
-		int w = (int) (resizeFactor * frames.get(currentFrame).getTextureWidth());
-		int h = (int) (resizeFactor * frames.get(currentFrame).getTextureHeight());
+		float w = resizeFactor * frames.get(currentFrame).getTextureWidth();
+		float h = resizeFactor * frames.get(currentFrame).getTextureHeight();
 		
 		glLoadIdentity();
 		glTranslatef(x-anchorX*resizeFactor, y-anchorY*resizeFactor, 0f);
 		
 		glBegin(GL_QUADS);
 		glTexCoord2f(0, 0);
-		glVertex2i(0, 0);
+		glVertex2f(0, 0);
 		glTexCoord2f(1, 0);
-		glVertex2i(w, 0);
+		glVertex2f(w, 0);
 		glTexCoord2f(1, 1);
-		glVertex2i(w, h);
+		glVertex2f(w, h);
 		glTexCoord2f(0, 1);
-		glVertex2i(0, h);
+		glVertex2f(0, h);
 		glEnd();
 		
 		
@@ -122,8 +107,8 @@ public class Sprite {
 			
 			glLineWidth(2); 
 			glColor3f(0, 0, 1);
-			w = (int) (resizeFactor * frames.get(currentFrame).getImageWidth());
-			h = (int) (resizeFactor * frames.get(currentFrame).getImageHeight());
+			w =  (resizeFactor * frames.get(currentFrame).getImageWidth());
+			h = (resizeFactor * frames.get(currentFrame).getImageHeight());
 			glBegin(GL_LINES);
 			glVertex3f(1, 1, 0);
 			glVertex3f(w-1, 1, 0);
@@ -138,8 +123,8 @@ public class Sprite {
 			glVertex3f(1, 1, 0);
 			
 			glColor3f(1, 0, 0);
-			w = (int) frames.get(currentFrame).getTextureWidth();
-			h = (int) frames.get(currentFrame).getTextureHeight();
+			w =  frames.get(currentFrame).getTextureWidth();
+			h =  frames.get(currentFrame).getTextureHeight();
 			
 			glVertex3f(0, 0, 0);
 			glVertex3f(w, 0, 0);

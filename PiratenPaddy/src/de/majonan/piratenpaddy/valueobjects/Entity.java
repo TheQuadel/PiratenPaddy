@@ -16,10 +16,7 @@ import static org.lwjgl.opengl.GL11.glVertex2i;
 import java.util.HashMap;
 
 public abstract class Entity implements Comparable<Entity> {
-	protected int x;
-	protected int y;
-	protected int width;
-	protected int height;
+	protected float x, y, width, height;
 	protected int zIndex;
 	protected HashMap<String, Sprite> sprites;
 	protected Sprite currentSprite;
@@ -90,7 +87,7 @@ public abstract class Entity implements Comparable<Entity> {
 //		glLoadIdentity();
 
 		if(currentSprite != null){
-			currentSprite.draw(x, y);
+			currentSprite.draw((int)x, (int)y);
 		}else{
 			System.err.println("EntityError: Please change currentSprite!");
 		}
@@ -137,6 +134,24 @@ public abstract class Entity implements Comparable<Entity> {
 			return 1;
 		}
 		return 0;
+	}
+
+	public float getX() {
+		return x;
+	}
+
+
+	public float getY() {
+		return y;
+	}
+
+
+	public int getzIndex() {
+		return zIndex;
+	}
+
+	public void setzIndex(int zIndex) {
+		this.zIndex = zIndex;
 	}
 	
 }

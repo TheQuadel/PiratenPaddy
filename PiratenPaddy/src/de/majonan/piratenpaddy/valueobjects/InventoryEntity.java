@@ -24,7 +24,7 @@ public class InventoryEntity extends Entity {
 
 	public void update(List<Item> slots) {
 		for(int i=0; i< slotPositions.length && i < slots.size(); i++){
-			slots.get(i).setPosition(slotPositions[i][0]+x, slotPositions[i][1]+y);
+			slots.get(i).setPosition(slotPositions[i][0]+(int)x, slotPositions[i][1]+(int)y);
 		}
 		
 	}

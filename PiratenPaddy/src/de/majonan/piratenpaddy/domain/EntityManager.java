@@ -76,26 +76,35 @@ public class EntityManager {
 		}
 	}
 
-	public void update(int mouseX, int mouseY) {
+	public void mouseMove(int mouseX, int mouseY) {
 		
 		Entity e = getEntityAtPosition(mouseX, mouseY);
 		if(e != null){
 			for(EntityHoverListener l : hoverListeners){
 				l.onHover(e);
 			}
-			if(Mouse.isButtonDown(0)){
-				clickedEntity = e;
-			}else{
-				if(clickedEntity != null && e != null && clickedEntity.equals(e)){
-					clickedEntity = null;
-					for(EntityClickListener l : clickListeners){
-						l.onClicked(e);
-					}
-				}
-			}
+//			if(Mouse.isButtonDown(0)){
+//				clickedEntity = e;
+//			}else{
+//				if(clickedEntity != null && e != null && clickedEntity.equals(e)){
+//					clickedEntity = null;
+//					for(EntityClickListener l : clickListeners){
+//						l.onClicked(e);
+//					}
+//				}
+//			}
 		}
 		
+	}
+	
+public void clicked(int mouseX, int mouseY) {
 		
+		Entity e = getEntityAtPosition(mouseX, mouseY);
+		if(e != null){
+			for(EntityClickListener l : clickListeners){
+				l.onClicked(e);
+			}
+		}
 		
 	}
 	
