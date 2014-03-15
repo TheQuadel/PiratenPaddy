@@ -20,6 +20,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 import de.majonan.piratenpaddy.valueobjects.Area;
+import de.majonan.piratenpaddy.valueobjects.Cursor;
 import de.majonan.piratenpaddy.valueobjects.Entity;
 import de.majonan.piratenpaddy.valueobjects.InventoryEntity;
 import de.majonan.piratenpaddy.valueobjects.Item;
@@ -33,7 +34,7 @@ import de.majonan.piratenpaddy.valueobjects.listeners.MouseMoveListener;
 
 public class GameManager {
 	
-	public static final boolean DEBUG = !true;
+	public static boolean DEBUG = !true;
 	
 	//Konstanten
 	public static final String GAME_NAME = "PiratenPaddy";
@@ -43,8 +44,10 @@ public class GameManager {
 	
 	public static final int ZINDEX_BACKGROUND = -5;
 	public static final int ZINDEX_INVENTORY = 1000;
+
+	public static final int ZINDEX_CURSOR = 2000;
 	
-	
+	private Cursor cursor;
 	private InputManager inputManager;
 	private EntityManager entityManager;
 	private InventoryEntity inventoryEntity;
@@ -84,7 +87,7 @@ public class GameManager {
 //		}
 		
 		
-		//Mouse.setGrabbed(true);
+		Mouse.setGrabbed(true);
 		
 		//OpenGL-Zeug
 		glMatrixMode(GL_PROJECTION);
@@ -164,6 +167,11 @@ public class GameManager {
 		//entityManager.addEntity(new TreasureMap(800,400,IMAGE_PATH+"karte.png",IMAGE_PATH+"karte64.png"));
 		entityManager.addEntity(player);
 		
+		cursor = new Cursor(24, 24, 24, 24);
+		cursor.addSprite("walk", (new Sprite(16,24,8,12)).addFrame(IMAGE_PATH+"cursor/steps.png", 2000));
+		cursor.addSprite("pointer", (new Sprite(19,26,8,13)).addFrame(IMAGE_PATH+"cursor/hand.png", 2000));
+		cursor.changeSprite("hand");
+		entityManager.addEntity(cursor);
 
 		
 		
@@ -198,6 +206,12 @@ public class GameManager {
 			@Override
 			public boolean onKeyDown(int button) {
 				System.out.println("KeyEvent: [Down|"+Keyboard.getKeyName(button)+"]");
+				if(Keyboard.getKeyName(button).equals("ESCAPE")){
+					quit();
+				}
+				if(Keyboard.getKeyName(button).equals("D")){
+					DEBUG = !DEBUG;
+				}
 				return false;
 			}
 		});
@@ -228,6 +242,12 @@ public class GameManager {
 			@Override
 			public boolean onMouseMove(int x, int y, int dx, int dy) {
 				System.out.println("MouseEvent: [Moved| x:"+x+" y: "+y+" dx:"+dx+" dy:"+dy+"]");
+				cursor.setPosition(x, y);
+				if(area.isPositonWalkable(x, y)){
+					cursor.changeSprite("walk");
+				}else{
+					cursor.changeSprite("pointer");
+				}
 				return false;
 			}
 		});
