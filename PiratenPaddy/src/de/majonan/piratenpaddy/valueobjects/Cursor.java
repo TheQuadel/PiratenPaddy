@@ -16,9 +16,4 @@ public class Cursor extends Entity{
 		this.y = y;
 	}
 
-	@Override
-	public void lookAt() {
-		// TODO Auto-generated method stub
-		
-	}
 }

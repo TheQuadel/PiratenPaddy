@@ -3,6 +3,7 @@ package de.majonan.piratenpaddy.valueobjects;
 import java.awt.Image;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
@@ -12,7 +13,6 @@ import org.newdawn.slick.util.ResourceLoader;
 public abstract class Item extends Entity {
 	
 	private Point nearestPoint;
-	protected TextTransmitter texttransmitter;
 
 	public Item(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -40,6 +40,8 @@ public abstract class Item extends Entity {
 	public abstract void push();
 	public abstract void open();
 	public abstract void close();
+	public abstract List<Message> lookAt();
+	
 
 	public Point getNearestPoint() {
 		return nearestPoint;
@@ -49,8 +51,6 @@ public abstract class Item extends Entity {
 		this.nearestPoint = nearestPoint;
 	}
 	
-	public void setTextTransmitter(TextTransmitter tt){
-		this.texttransmitter = tt;
-	}
+
 
 }

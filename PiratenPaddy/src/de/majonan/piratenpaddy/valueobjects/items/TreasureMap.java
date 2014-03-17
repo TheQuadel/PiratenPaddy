@@ -1,6 +1,9 @@
 package de.majonan.piratenpaddy.valueobjects.items;
 
+import java.util.List;
+
 import de.majonan.piratenpaddy.valueobjects.Item;
+import de.majonan.piratenpaddy.valueobjects.Message;
 
 public class TreasureMap extends Item {
 
@@ -34,9 +37,10 @@ public class TreasureMap extends Item {
 	}
 
 	@Override
-	public void lookAt() {
+	public List<Message> lookAt() {
 		// TODO Auto-generated method stub
 	System.out.print("Papa hat 'Mein Schatz' draufgeschrieben. Sie ist zu schmutzig, um mehr zu erkennen");
+		return null;
 	}
 
 }

@@ -24,7 +24,6 @@ public abstract class Entity implements Comparable<Entity> {
 
 	protected boolean highlighted;
 	
-	public abstract void lookAt();
 	
 	public Entity(int x, int y, int width, int height){
 		this.x = x;

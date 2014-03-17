@@ -20,7 +20,7 @@ public class Player extends Character {
 		super(x, y, width, height);
 		this.inventory = new Inventory(16);
 		setSpeed(4);
-		speechPoint = new Point(0,-450);
+		messagePoint = new Point(0,-450);
 	}
 
 	@Override

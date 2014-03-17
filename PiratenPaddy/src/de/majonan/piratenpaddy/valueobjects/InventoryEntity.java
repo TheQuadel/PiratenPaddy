@@ -16,11 +16,6 @@ public class InventoryEntity extends Entity {
 		this.slotPositions = slotPositions;
 	}
 
-	@Override
-	public void lookAt() {
-		// TODO Auto-generated method stub
-
-	}
 
 	public void update(List<Item> slots) {
 		for(int i=0; i< slotPositions.length && i < slots.size(); i++){

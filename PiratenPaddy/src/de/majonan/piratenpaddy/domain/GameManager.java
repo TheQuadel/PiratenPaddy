@@ -152,7 +152,7 @@ public class GameManager {
 						
 						@Override
 						public void execute() {
-							item.lookAt();
+							player.lookAt(item);
 							
 						}
 					});
@@ -214,7 +214,6 @@ public class GameManager {
 //		entityManager.addEntity(map);
 		
 		Item candle = new Candle(16,237);
-		candle.setTextTransmitter(player.getTextTransmitter());
 		entityManager.addEntity(candle);
 		//entityManager.addEntity(new TreasureMap(400,200,IMAGE_PATH+"karte.png",IMAGE_PATH+"karte64.png"));
 		//entityManager.addEntity(new TreasureMap(800,400,IMAGE_PATH+"karte.png",IMAGE_PATH+"karte64.png"));
@@ -340,12 +339,7 @@ public class GameManager {
 
 	private void showLoadingScreen(){
 		Entity loadScr = new Entity(0,0,GAME_WIDTH, GAME_HEIGHT) {
-			
-			@Override
-			public void lookAt() {
-				// TODO Auto-generated method stub
-				
-			}
+
 		};
 		loadScr.addSprite("default", (new Sprite(GAME_WIDTH, GAME_HEIGHT,0,0)).addFrame(IMAGE_PATH+"ladescreen.png", 10000));
 		loadScr.changeSprite("default");

@@ -12,8 +12,10 @@ import static org.lwjgl.opengl.GL11.glLineWidth;
 import static org.lwjgl.opengl.GL11.glVertex3f;
 
 import java.awt.Font;
+import java.util.List;
 import java.util.Vector;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.TrueTypeFont;
 
 import de.majonan.piratenpaddy.domain.GameManager;
@@ -21,10 +23,9 @@ import de.majonan.piratenpaddy.domain.GameManager;
 public abstract class Character extends Entity {
 
 	private TrueTypeFont font;
-	private String speech;
-	private long speechStart;
-	private long speechDuration;
-	protected Point speechPoint;
+	
+	protected Point messagePoint;
+	protected List<Message> messageQueue;
 	
 	private float speed = 2;
 	
@@ -49,18 +50,14 @@ public abstract class Character extends Entity {
 		this.z =((y/720f)*80+20);
 		this.startWidth = width;
 		this.startHeight = height;
-		this.speechPoint = new Point(0,0);
+		this.messagePoint = new Point(0,0);
 		
 		this.font = new TrueTypeFont(new Font("Times New Roman", Font.PLAIN, 24), true);
+		this.messageQueue = new Vector<Message>();
 		// TODO Auto-generated constructor stub
 	}
 	
 	
-	public void say(String what, long duration){
-		this.speech = what;
-		this.speechDuration = duration;
-		this.speechStart = System.currentTimeMillis();
-	}
 	
 	public void moveTo(int x, int y, Callback callback){
 		isMoving = true;
@@ -78,9 +75,7 @@ public abstract class Character extends Entity {
 	
 	public void tick(){
 		
-		if(System.currentTimeMillis() > speechStart+speechDuration){
-			speech = null;
-		}
+		
 	
 //		isMoving = false;
 //		if(Math.abs(destinationX-x) > 2){
@@ -138,10 +133,13 @@ public abstract class Character extends Entity {
 			System.err.println("EntityError: Please change currentSprite!");
 		}
 		
-		if(speech != null){
-			int dx = font.getWidth(speech)/2;
-			int dy = font.getHeight(speech)/2;
-			font.drawString(x+speechPoint.x-dx, y+speechPoint.y*(z/100f)-dy, speech);
+		System.out.println("Player #messages:"+messageQueue.size());
+		if(!messageQueue.isEmpty()){
+			if(!messageQueue.get(0).isExpired()){
+				messageQueue.get(0).draw(messagePoint.x, messagePoint.y, font, Color.white);
+			}else{
+				messageQueue.remove(0);
+			}
 		}
 		
 		if(GameManager.DEBUG){
@@ -168,16 +166,48 @@ public abstract class Character extends Entity {
 		this.speed = speed;
 	}
 	
-	public TextTransmitter getTextTransmitter(){
-		final Character me = this;
-		return new TextTransmitter() {
-			
-			@Override
-			public void say(String what, long duration) {
-				me.say(what, duration);
-				
-			}
-		};
+	public int say(String text, long duration){
+		Message m = new Message(text, duration, Message.ALIGN_H_CENTER, Message.ALIGN_V_CENTER);
+		m.setColor(Color.white);
+		this.messageQueue.add(m);
+		return messageQueue.indexOf(m);
+	}
+	
+	public void beQuite(){
+		messageQueue.clear();
+	}
+	
+	
+	public void pull(Item item){
+		item.pull();
+	}
+	
+	public void push(Item item){
+		item.push();
+	}
+	
+	public void open(Item item){
+		item.open();
+	}
+	
+	public void close(Item item){
+		item.close();
+	}
+	
+	public void lookAt(Item item){
+		List<Message> messages = item.lookAt();
+		for(Message m : messages){
+			m.setColor(Color.white);
+			m.sethAlign(Message.ALIGN_H_CENTER);
+			m.setvAlign(Message.ALIGN_V_CENTER);
+			messageQueue.add(m);
+		}
+		System.out.println("LookAt - #messages:"+messages.size());
 	}
 
+	public void lookAt(Character character){
+		character.lookAt();
+	}
+	
+	public abstract void lookAt();
 }

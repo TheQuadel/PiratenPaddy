@@ -1,11 +1,11 @@
 package de.majonan.piratenpaddy.valueobjects.items;
 
-import java.awt.Font;
-
-import org.newdawn.slick.TrueTypeFont;
+import java.util.List;
+import java.util.Vector;
 
 import de.majonan.piratenpaddy.domain.GameManager;
 import de.majonan.piratenpaddy.valueobjects.Item;
+import de.majonan.piratenpaddy.valueobjects.Message;
 import de.majonan.piratenpaddy.valueobjects.Point;
 import de.majonan.piratenpaddy.valueobjects.Sprite;
 
@@ -50,8 +50,13 @@ public class Candle extends Item {
 	}
 
 	@Override
-	public void lookAt() {
-		texttransmitter.say("Sie brennt schon seit Ewigkeiten", 2000);
+	public List<Message> lookAt() {
+		List<Message> messages = new Vector<Message>();
+		messages.add(new Message("Sie brennt schon seit Ewigkeiten", 2000));
+		messages.add(new Message("Liegt bestimmt an Klebstoffgasen in der Luft", 2000));
+		messages.add(new Message("Seit ich stündlich schnüffel sind die echt gestiegen", 2000));
+		
+		return messages;
 
 	}
 

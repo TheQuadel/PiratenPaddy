@@ -18,11 +18,6 @@ public class Area extends Entity {
 		polygon = new Vector<Point>();
 	}
 
-	@Override
-	public void lookAt() {
-		// TODO Auto-generated method stub
-
-	}
 
 	public void setMask(Sprite sprite){
 		this.mask = sprite;

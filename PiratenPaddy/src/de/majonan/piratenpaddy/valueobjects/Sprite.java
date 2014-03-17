@@ -69,6 +69,11 @@ public class Sprite {
 	public void draw(float x, float y, float resizeFactor){
 		if(currentFrame == -1 || frames.size() == 0){
 			System.err.println("SpriteError: Please add frames before drawing!");
+			try{
+				throw new Exception("SpriteError: Please add frames before drawing!");
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 			return;
 		}
 		if(lastFrameTime + deltas.get(currentFrame) <= System.currentTimeMillis()){
